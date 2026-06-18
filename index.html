@@ -2,106 +2,229 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadora de Attach</title>
 
 <style>
+/* ESTILO BLANCO MINIMALISTA DE APPLE */
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #1d1d1f, #2c2c2e);
-    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f5f5f7;
+    color: #1d1d1f;
     text-align: center;
-    padding: 30px;
+    padding: 20px;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
 }
 
+/* CONTENEDOR RESPONSIVO BLANCO */
 .container {
-    background: #2c2c2e;
-    padding: 25px;
-    border-radius: 15px;
-    max-width: 500px;
-    margin: auto;
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
+    background: #ffffff;
+    padding: 35px 28px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 440px;
+    box-sizing: border-box;
+    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.04);
+    border: 1px solid #d2d2d7;
 }
 
 h2 {
-    margin-bottom: 20px;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.022em;
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: #1d1d1f;
 }
 
+.form-group {
+    text-align: left;
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #86868b;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-left: 4px;
+}
+
+/* INPUTS ESTILO NATIVO APPLE CREADOS PARA TOCAR EN CELULAR */
 select, input {
-    width: 90%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
-    border: none;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #d2d2d7;
+    background: #ffffff;
+    color: #1d1d1f;
     font-size: 16px;
+    font-weight: 400;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
+select:focus, input:focus {
+    border-color: #0071e3;
+    background: #ffffff;
+}
+
+input[readonly] {
+    background: #f5f5f7;
+    color: #6e6e73;
+    border-color: #e8e8ed;
+    cursor: not-allowed;
+}
+
+/* BOTÓN DE ACCIÓN AZUL APPLE */
 button {
     background: #0071e3;
-    color: white;
+    color: #ffffff;
     border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
     font-size: 16px;
+    font-weight: 500;
     cursor: pointer;
     margin-top: 10px;
+    transition: background 0.2s ease, transform 0.1s ease;
 }
 
 button:hover {
-    background: #005bb5;
+    background: #0077ed;
 }
 
+button:active {
+    transform: scale(0.99);
+}
+
+/* SECCIÓN DE RESULTADOS EN LIMPIO */
 #resultado {
-    margin-top: 20px;
+    margin-top: 24px;
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    color: #1d1d1f;
+    border-top: 1px solid #e8e8ed;
+    padding-top: 20px;
+}
+
+#sugerencias {
+    margin-top: 18px;
+    font-size: 15px;
+    line-height: 1.6;
+    text-align: left;
+    background: #f5f5f7;
+    padding: 18px;
+    border-radius: 14px;
+    border: 1px solid #e8e8ed;
+    display: none;
+}
+
+.item-sugerido {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #1d1d1f;
+}
+
+.item-sugerido:last-child {
+    margin-bottom: 0;
+}
+
+.total-seccion {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #d2d2d7;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #1d1d1f;
+}
+
+/* DISEÑO 100% RESPONSIVO PARA CELULARES */
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+        background: #ffffff; /* En celular se funde con el fondo para verse nativo */
+    }
+    
+    .container {
+        padding: 16px 8px;
+        box-shadow: none;
+        border: none;
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 22px;
+    }
+
+    select, input, button {
+        font-size: 16px; /* Evita zooms automáticos e incómodos en Safari/iOS */
+        padding: 14px 12px;
+    }
 }
 </style>
 
 </head>
-
 <body>
 
 <div class="container">
 
-<h2>Calculadora de Attach</h2>
+    <h2>Calculadora de Attach</h2>
 
-<label>Categoría:</label>
-<select id="categoria" onchange="cargarModelos()">
-    <option value="">Seleccione</option>
-    <option value="iPhone">iPhone</option>
-    <option value="MacBook">Mac</option>
-    <option value="iPad">iPad</option>
-    <option value="Watch">Apple Watch</option>
-</select>
+    <div class="form-group">
+        <label>Categoría</label>
+        <select id="categoria" onchange="cargarModelos()">
+            <option value="">Seleccione dispositivo</option>
+            <option value="iPhone">iPhone</option>
+            <option value="MacBook">Mac</option>
+            <option value="iPad">iPad</option>
+            <option value="Watch">Apple Watch</option>
+        </select>
+    </div>
 
-<br>
+    <div class="form-group">
+        <label>Modelo</label>
+        <select id="modelo" onchange="setPrecio()">
+            <option value="">Seleccione un modelo</option>
+        </select>
+    </div>
 
-<label>Modelo:</label>
-<select id="modelo" onchange="setPrecio()">
-    <option value="">Seleccione un modelo</option>
-</select>
+    <div class="form-group">
+        <label>Precio del Equipo ($)</label>
+        <input type="number" id="precio" readonly placeholder="0.00">
+    </div>
 
-<br>
+    <div class="form-group">
+        <label>% Attach Objetivo</label>
+        <input type="number" id="attach" value="29.4">
+    </div>
 
-<label>Precio ($):</label>
-<input type="number" id="precio" readonly>
+    <button onclick="calcular()">Calcular Combo</button>
 
-<br>
-
-<label>% Attach:</label>
-<input type="number" id="attach" value="29.4">
-
-<br>
-
-<button onclick="calcular()">Calcular</button>
-
-<h3 id="resultado"></h3>
+    <div id="resultado"></div>
+    <div id="sugerencias"></div>
 
 </div>
 
 <script>
 
-// Base de datos
+// PRODUCTOS
 const productos = {
     iPhone: [
         { nombre: "iPhone 13 - 128GB", precio: 589 },
@@ -143,11 +266,50 @@ const productos = {
     ]
 };
 
-// Cargar modelos
+// ACCESORIOS REORGANIZADOS POR PRIORIDAD
+const accesoriosDB = {
+    iPhone: [
+        { nombre: "Case de Protección", precio: 69, esProteccion: true },
+        { nombre: "Protector de Vidrio", precio: 42, esProteccion: true },
+        { nombre: "Protector de cámaras", precio: 22, esProteccion: true },
+        { nombre: "Cargador Apple 20W", precio: 49 },
+        { nombre: "Cargador MagSafe", precio: 54 },
+        { nombre: "Batería MagSafe", precio: 74 },
+        { nombre: "Parlante JBL Grip", precio: 99 }
+    ],
+    MacBook: [
+        { nombre: "Funda Sleeve", precio: 39, esProteccion: true },
+        { nombre: "Carcasa HardCase", precio: 59, esProteccion: true },
+        { nombre: "Suscripción Office 365", precio: 94 },
+        { nombre: "Multiport Hub USB-C", precio: 74 },
+        { nombre: "Magic Mouse", precio: 119 },
+        { nombre: "Magic Keyboard", precio: 99 }
+    ],
+    iPad: [
+        { nombre: "Smart Folio Case", precio: 59, esProteccion: true },
+        { nombre: "Vidrio Temperado", precio: 39, esProteccion: true },
+        { nombre: "Apple Pencil Pro", precio: 192 },
+        { nombre: "Magic Keyboard iPad", precio: 199 }
+    ],
+    Watch: [
+        { nombre: "Protector de Pantalla", precio: 29, esProteccion: true },
+        { nombre: "Cargador Rápido Watch", precio: 32 },
+        { nombre: "Base de Carga Magnética", precio: 119 },
+        { nombre: "Correa Adicional", precio: 64 }
+    ]
+};
+
+const opcionesAirPods = [
+    { nombre: "AirPods 4", precio: 179 },
+    { nombre: "AirPods 4 con ANC", precio: 229 },
+    { nombre: "AirPods Pro 3", precio: 329 }
+];
+
+const airPodsMax = { nombre: "AirPods Max", precio: 689 };
+
 function cargarModelos() {
     let categoria = document.getElementById("categoria").value;
     let modeloSelect = document.getElementById("modelo");
-
     modeloSelect.innerHTML = '<option value="">Seleccione un modelo</option>';
 
     if (categoria && productos[categoria]) {
@@ -158,11 +320,11 @@ function cargarModelos() {
             modeloSelect.appendChild(option);
         });
     }
-
     document.getElementById("precio").value = "";
+    document.getElementById("resultado").innerText = "";
+    document.getElementById("sugerencias").style.display = "none";
 }
 
-// Setear precio
 function setPrecio() {
     let categoria = document.getElementById("categoria").value;
     let index = document.getElementById("modelo").value;
@@ -173,28 +335,96 @@ function setPrecio() {
     }
 }
 
-// Calcular
 function calcular() {
+    let categoria = document.getElementById("categoria").value;
     let precio = parseFloat(document.getElementById("precio").value);
     let attach = parseFloat(document.getElementById("attach").value);
 
     if (!precio) return;
 
-    let accesorios = precio * (attach / 100);
-    let total = precio + accesorios;
+    let accesoriosMonto = precio * (attach / 100);
+    let total = precio + accesoriosMonto;
 
-    let formatoUSD = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
+    let formatoUSD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
+    document.getElementById("resultado").innerHTML =
+        "<span style='font-size: 14px; color: #86868b; font-weight: 400;'>Meta de Attach:</span><br>" + 
+        formatoUSD.format(accesoriosMonto) +
+        "<br><span style='font-size: 15px; color: #86868b; font-weight: 400;'>Venta sugerida total: " + formatoUSD.format(total) + "</span>";
+
+    mostrarSugerencias(accesoriosMonto, categoria);
+}
+
+function mostrarSugerencias(montoObjetivo, categoria) {
+    let listaBase = accesoriosDB[categoria];
+    if (!listaBase) return;
+
+    let combinacion = [];
+    let totalAcumulado = 0;
+
+    // 1. Prioridad: Protección básica
+    let proteccion = listaBase.filter(item => item.esProteccion);
+    for (let item of proteccion) {
+        if (totalAcumulado < montoObjetivo) {
+            combinacion.push(item);
+            totalAcumulado += item.precio;
+        }
+    }
+
+    // 2. Selección Inteligente Simulada de Audio
+    if (totalAcumulado < montoObjetivo) {
+        let faltante = montoObjetivo - totalAcumulado;
+        let restoProductos = listaBase.filter(item => !item.esProteccion).sort((a, b) => b.precio - a.precio);
+        let potencialRestoAcumulado = restoProductos.reduce((sum, item) => sum + item.precio, 0);
+
+        if (329 + potencialRestoAcumulado >= faltante) {
+            let airPodsOrdenados = [...opcionesAirPods].sort((a, b) => a.precio - b.precio);
+            let mejorAirPod = null;
+            for (let pod of airPodsOrdenados) {
+                mejorAirPod = pod;
+                if (pod.precio >= faltante) {
+                    break;
+                }
+            }
+            if (mejorAirPod) {
+                combinacion.push(mejorAirPod);
+                totalAcumulado += mejorAirPod.precio;
+            }
+        } else {
+            combinacion.push(airPodsMax);
+            totalAcumulado += airPodsMax.precio;
+        }
+    }
+
+    // 3. Relleno con el stock remanente
+    let restoProductos = listaBase.filter(item => !item.esProteccion).sort((a, b) => b.precio - a.precio);
+    for (let item of restoProductos) {
+        if (totalAcumulado < montoObjetivo) {
+            combinacion.push(item);
+            totalAcumulado += item.precio;
+        }
+    }
+
+    // RENDERIZADO EN GRIS CLARO SOBRE BLANCO
+    let formatoUSD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+    let sugerenciasDiv = document.getElementById("sugerencias");
+    
+    let html = "<b style='color:#1d1d1f; display:block; margin-bottom:10px; font-size:14px;'>Estrategia de Venta:</b>";
+
+    combinacion.forEach(item => {
+        html += `<div class="item-sugerido"><span>• ${item.nombre}</span> <span>${formatoUSD.format(item.precio)}</span></div>`;
     });
 
-    let resultadoTexto =
-        "Te faltan " + formatoUSD.format(accesorios) + " en accesorios\n" +
-        "Ticket total: " + formatoUSD.format(total);
+    html += `<div class="total-seccion"><span>Total sugerido:</span> <span>${formatoUSD.format(totalAcumulado)}</span></div>`;
 
-    let resultadoElemento = document.getElementById("resultado");
-    resultadoElemento.innerText = resultadoTexto;
+    if (totalAcumulado >= montoObjetivo) {
+        html += `<div style="margin-top: 12px; font-size: 13px; color: #24b23e; font-weight: 600; text-align: center;">✓ Cumple el objetivo de Attach</div>`;
+    } else {
+        html += `<div style="margin-top: 12px; font-size: 13px; color: #ff3b30; font-weight: 600; text-align: center;">⚠ Falta para cubrir la meta</div>`;
+    }
 
+    sugerenciasDiv.innerHTML = html;
+    sugerenciasDiv.style.display = "block";
 }
 
 </script>
