@@ -159,7 +159,7 @@ button:active {
 @media (max-width: 480px) {
     body {
         padding: 12px;
-        background: #ffffff; /* En celular se funde con el fondo para verse nativo */
+        background: #ffffff;
     }
     
     .container {
@@ -174,7 +174,7 @@ button:active {
     }
 
     select, input, button {
-        font-size: 16px; /* Evita zooms automáticos e incómodos en Safari/iOS */
+        font-size: 16px;
         padding: 14px 12px;
     }
 }
@@ -362,7 +362,7 @@ function mostrarSugerencias(montoObjetivo, categoria) {
     let combinacion = [];
     let totalAcumulado = 0;
 
-    // 1. Prioridad: Protección básica
+    // 1. Prioridad Absoluta: Protección básica (para todos)
     let proteccion = listaBase.filter(item => item.esProteccion);
     for (let item of proteccion) {
         if (totalAcumulado < montoObjetivo) {
@@ -371,41 +371,53 @@ function mostrarSugerencias(montoObjetivo, categoria) {
         }
     }
 
-    // 2. Selección Inteligente Simulada de Audio
-    if (totalAcumulado < montoObjetivo) {
-        let faltante = montoObjetivo - totalAcumulado;
+    // Funciones lógicas internas para modular el orden
+    function agregarRestoAccesorios() {
         let restoProductos = listaBase.filter(item => !item.esProteccion).sort((a, b) => b.precio - a.precio);
-        let potencialRestoAcumulado = restoProductos.reduce((sum, item) => sum + item.precio, 0);
-
-        if (329 + potencialRestoAcumulado >= faltante) {
-            let airPodsOrdenados = [...opcionesAirPods].sort((a, b) => a.precio - b.precio);
-            let mejorAirPod = null;
-            for (let pod of airPodsOrdenados) {
-                mejorAirPod = pod;
-                if (pod.precio >= faltante) {
-                    break;
-                }
+        for (let item of restoProductos) {
+            if (totalAcumulado < montoObjetivo) {
+                combinacion.push(item);
+                totalAcumulado += item.precio;
             }
-            if (mejorAirPod) {
-                combinacion.push(mejorAirPod);
-                totalAcumulado += mejorAirPod.precio;
-            }
-        } else {
-            combinacion.push(airPodsMax);
-            totalAcumulado += airPodsMax.precio;
         }
     }
 
-    // 3. Relleno con el stock remanente
-    let restoProductos = listaBase.filter(item => !item.esProteccion).sort((a, b) => b.precio - a.precio);
-    for (let item of restoProductos) {
+    function agregarAirPods() {
         if (totalAcumulado < montoObjetivo) {
-            combinacion.push(item);
-            totalAcumulado += item.precio;
+            let faltante = montoObjetivo - totalAcumulado;
+            let restoProductos = listaBase.filter(item => !item.esProteccion).sort((a, b) => b.precio - a.precio);
+            let potencialRestoAcumulado = restoProductos.reduce((sum, item) => sum + item.precio, 0);
+
+            if (329 + potencialRestoAcumulado >= faltante) {
+                let airPodsOrdenados = [...opcionesAirPods].sort((a, b) => a.precio - b.precio);
+                let mejorAirPod = null;
+                for (let pod of airPodsOrdenados) {
+                    mejorAirPod = pod;
+                    if (pod.precio >= faltante) {
+                        break;
+                    }
+                }
+                if (mejorAirPod) {
+                    combinacion.push(mejorAirPod);
+                    totalAcumulado += mejorAirPod.precio;
+                }
+            } else {
+                combinacion.push(airPodsMax);
+                totalAcumulado += airPodsMax.precio;
+            }
         }
     }
 
-    // RENDERIZADO EN GRIS CLARO SOBRE BLANCO
+    // APLICACIÓN DE PRIORIDAD CONDICIONAL
+    if (categoria === "Watch") {
+        agregarRestoAccesorios(); // Primero el resto de accesorios de Watch (Cargador, Base, Correas)
+        agregarAirPods();         // Si aún falta dinero para la meta, ofrece AirPods
+    } else {
+        agregarAirPods();         // Para iPhone, Mac e iPad mantiene los AirPods como prioridad 2
+        agregarRestoAccesorios(); // Y rellena con el resto al final
+    }
+
+    // RENDERIZADO EN PANTALLA
     let formatoUSD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
     let sugerenciasDiv = document.getElementById("sugerencias");
     
