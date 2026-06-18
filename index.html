@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora de Attach</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1d1d1f, #2c2c2e);
+    color: white;
+    text-align: center;
+    padding: 30px;
+}
+
+.container {
+    background: #2c2c2e;
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+select, input {
+    width: 90%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+}
+
+button {
+    background: #0071e3;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #005bb5;
+}
+
+#resultado {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Calculadora de Attach</h2>
+
+<label>Categoría:</label>
+<select id="categoria" onchange="cargarModelos()">
+    <option value="">Seleccione</option>
+    <option value="iPhone">iPhone</option>
+    <option value="MacBook">Mac</option>
+    <option value="iPad">iPad</option>
+    <option value="Watch">Apple Watch</option>
+</select>
+
+<br>
+
+<label>Modelo:</label>
+<select id="modelo" onchange="setPrecio()">
+    <option value="">Seleccione un modelo</option>
+</select>
+
+<br>
+
+<label>Precio ($):</label>
+<input type="number" id="precio" readonly>
+
+<br>
+
+<label>% Attach:</label>
+<input type="number" id="attach" value="29.4">
+
+<br>
+
+<button onclick="calcular()">Calcular</button>
+
+<h3 id="resultado"></h3>
+
+</div>
+
+<script>
+
+// Base de datos
+const productos = {
+    iPhone: [
+        { nombre: "iPhone 13 - 128GB", precio: 589 },
+        { nombre: "iPhone 15 - 128GB", precio: 899 },
+        { nombre: "iPhone 16 - 128GB", precio: 1049 },
+        { nombre: "iPhone 17e - 256GB", precio: 849 },
+        { nombre: "iPhone 17 - 256GB", precio: 1209 },
+        { nombre: "iPhone Air - 256GB", precio: 1369 },
+        { nombre: "iPhone 17 Pro - 256GB", precio: 1659 },
+        { nombre: "iPhone 17 Pro - 512GB", precio: 1969 },
+        { nombre: "iPhone 17 Pro Max - 256GB", precio: 1809 },
+        { nombre: "iPhone 17 Pro Max - 512GB", precio: 2099 }
+    ],
+    MacBook: [
+        { nombre: "MacBook Neo - 256GB", precio: 779 },
+        { nombre: "MacBook Neo - 512GB", precio: 899 },
+        { nombre: "MacBook Air 13 M5 - 512GB", precio: 1469 },
+        { nombre: "MacBook Air 13 M5 - 1TB", precio: 1769 },
+        { nombre: "MacBook Air 15 M5 - 512GB", precio: 1769 },
+        { nombre: "MacBook Air 15 M5 - 1TB", precio: 2039 },
+        { nombre: "MacBook Pro 14 M5 - 512GB", precio: 2099 },
+        { nombre: "MacBook Pro 14 M5 - 1TB", precio: 2559 },
+        { nombre: "MacBook Pro 16 M5 - 1TB", precio: 3479 }
+    ],
+    iPad: [
+        { nombre: "iPad 11 A16 - 128GB", precio: 479 },
+        { nombre: "iPad 11 A16 - 256GB", precio: 609 },
+        { nombre: "iPad Mini A17 Pro - 128GB", precio: 689 },
+        { nombre: "iPad Air 11 M4 - 128GB", precio: 799 },
+        { nombre: "iPad Air 13 M4 - 128GB", precio: 1079 },
+        { nombre: "iPad Pro 11 M5 - 256GB", precio: 1349 },
+        { nombre: "iPad Pro 13 M5 - 256GB", precio: 1749 }
+    ],
+    Watch: [
+        { nombre: "Apple Watch SE3 - 40mm", precio: 359 },
+        { nombre: "Apple Watch SE3 - 44mm", precio: 399 },
+        { nombre: "Apple Watch Series 9 - 42mm", precio: 579 },
+        { nombre: "Apple Watch Series 9 - 46mm", precio: 619 }
+    ]
+};
+
+// Cargar modelos
+function cargarModelos() {
+    let categoria = document.getElementById("categoria").value;
+    let modeloSelect = document.getElementById("modelo");
+
+    modeloSelect.innerHTML = '<option value="">Seleccione un modelo</option>';
+
+    if (categoria && productos[categoria]) {
+        productos[categoria].forEach((item, index) => {
+            let option = document.createElement("option");
+            option.value = index;
+            option.text = item.nombre;
+            modeloSelect.appendChild(option);
+        });
+    }
+
+    document.getElementById("precio").value = "";
+}
+
+// Setear precio
+function setPrecio() {
+    let categoria = document.getElementById("categoria").value;
+    let index = document.getElementById("modelo").value;
+
+    if (categoria && index !== "") {
+        let producto = productos[categoria][index];
+        document.getElementById("precio").value = producto.precio;
+    }
+}
+
+// Calcular
+function calcular() {
+    let precio = parseFloat(document.getElementById("precio").value);
+    let attach = parseFloat(document.getElementById("attach").value);
+
+    if (!precio) return;
+
+    let accesorios = precio * (attach / 100);
+    let total = precio + accesorios;
+
+    let formatoUSD = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    });
+
+    let resultadoTexto =
+        "Te faltan " + formatoUSD.format(accesorios) + " en accesorios\n" +
+        "Ticket total: " + formatoUSD.format(total);
+
+    let resultadoElemento = document.getElementById("resultado");
+    resultadoElemento.innerText = resultadoTexto;
+
+    // Color dinámico
+    if (accesorios >= 300) {
+        resultadoElemento.style.color = "#00ff99";
+    } else {
+        resultadoElemento.style.color = "#ff453a";
+    }
+}
+
+</script>
+
+</body>
+</html>
