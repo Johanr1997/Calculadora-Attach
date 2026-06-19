@@ -167,16 +167,20 @@ button:active {
     color: #1d1d1f;
 }
 
+/* ESTILOS PARA EL CONTENEDOR DEL LOGO */
 .logo-final {
-    max-width: 110px;
-    height: auto;
     margin-top: 30px;
-    opacity: 0.5;
-    transition: opacity 0.2s ease;
     display: inline-block;
 }
 
-.logo-final:hover {
+.logo-final img {
+    max-width: 110px;
+    height: auto;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.logo-final img:hover {
     opacity: 0.9;
 }
 
@@ -271,13 +275,12 @@ button:active {
         color: #ffffff;
     }
 
-    /* Mantiene los colores originales del logo corporativo sin alteración */
-    .logo-final {
-        filter: none;
+    /* Ajuste ligero de opacidad del logo en modo oscuro */
+    .logo-final img {
         opacity: 0.7;
     }
     
-    .logo-final:hover {
+    .logo-final img:hover {
         opacity: 1;
     }
 
@@ -329,7 +332,10 @@ button:active {
     <div id="resultado"></div>
     <div id="sugerencias"></div>
 
-    <img src="logo-ishop.png" alt="Logo corporativo" class="logo-final">
+    <picture class="logo-final">
+        <source srcset="logo-ishop-blanco.png" media="(prefers-color-scheme: dark)">
+        <img src="logo-ishop.png" alt="Logo corporativo">
+    </picture>
 
 </div>
 
