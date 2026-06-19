@@ -155,6 +155,19 @@ button:active {
     color: #1d1d1f;
 }
 
+.logo-final {
+    max-width: 110px;
+    height: auto;
+    margin-top: 30px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+    display: inline-block;
+}
+
+.logo-final:hover {
+    opacity: 0.9;
+}
+
 /* DISEÑO 100% RESPONSIVO PARA CELULARES */
 @media (max-width: 480px) {
     body {
@@ -219,6 +232,8 @@ button:active {
 
     <div id="resultado"></div>
     <div id="sugerencias"></div>
+
+    <img src="logo-ishop.png" alt="Logo corporativo" class="logo-final">
 
 </div>
 
@@ -362,7 +377,7 @@ function mostrarSugerencias(montoObjetivo, categoria) {
     let combinacion = [];
     let totalAcumulado = 0;
 
-    // 1. Prioridad Absoluta: Protección básica (para todos)
+    // 1. Prioridad Absoluta: Protección básica
     let proteccion = listaBase.filter(item => item.esProteccion);
     for (let item of proteccion) {
         if (totalAcumulado < montoObjetivo) {
@@ -371,7 +386,7 @@ function mostrarSugerencias(montoObjetivo, categoria) {
         }
     }
 
-    // Funciones lógicas internas para modular el orden
+    // Funciones lógicas internas
     function agregarRestoAccesorios() {
         let restoProductos = listaBase.filter(item => !item.esProteccion).sort((a, b) => b.precio - a.precio);
         for (let item of restoProductos) {
@@ -410,11 +425,11 @@ function mostrarSugerencias(montoObjetivo, categoria) {
 
     // APLICACIÓN DE PRIORIDAD CONDICIONAL
     if (categoria === "Watch") {
-        agregarRestoAccesorios(); // Primero el resto de accesorios de Watch (Cargador, Base, Correas)
-        agregarAirPods();         // Si aún falta dinero para la meta, ofrece AirPods
+        agregarRestoAccesorios(); 
+        agregarAirPods();         
     } else {
-        agregarAirPods();         // Para iPhone, Mac e iPad mantiene los AirPods como prioridad 2
-        agregarRestoAccesorios(); // Y rellena con el resto al final
+        agregarAirPods();         
+        agregarRestoAccesorios(); 
     }
 
     // RENDERIZADO EN PANTALLA
